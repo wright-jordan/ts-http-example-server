@@ -1,4 +1,4 @@
 import { NewCookiesMiddleware } from "./cookiesMiddleware.js";
 import { NewSendStringMiddleware } from "./sendStringMiddleware.js";
-export const sendStringMiddleware = NewCookiesMiddleware();
-export const cookiesMiddleware = NewSendStringMiddleware();
+export const cookies = NewCookiesMiddleware();
+export const sendString = NewSendStringMiddleware();

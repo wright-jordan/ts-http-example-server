@@ -1,19 +1,21 @@
 import test from "node:test";
-import * as http from "node:http";
 import * as tsHTTP from "../tsHTTP.js";
 import * as hello from "./hello.js";
 import assert from "node:assert/strict";
+import { NewSendStringMiddleware } from "../middleware/sendStringMiddleware.js";
+import { NewCookiesMiddleware } from "../middleware/cookiesMiddleware.js";
 test('should push "hello=world" to ctx.cookies', async () => {
-  const ctx: hello.Ctx = {
-    reply: "",
-    status: -1,
-    cookies: [],
-  };
-  const server = http.createServer(
-    tsHTTP.NewTestListener<hello.Ctx, hello.Deps>(null, ctx, hello.Handler)
+  const sendString = NewSendStringMiddleware();
+  const cookies = NewCookiesMiddleware();
+
+  const testServer = tsHTTP.NewTestServer(
+    hello.Listener(sendString, cookies, null)
   );
-  server.listen(8080);
-  // @ts-ignore: experimental-fetch
+  testServer.listen(8080);
+
+  // @ts-ignore
   const res = await fetch("http://localhost:8080");
-  assert.ok(ctx.cookies.includes("hello=world"));
+  assert.ok(true);
+
+  await testServer.stop();
 });

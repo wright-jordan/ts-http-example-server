@@ -17,7 +17,7 @@ function use(next: tsHTTP.Handler<Context & any>): tsHTTP.Handler<Context> {
   };
 }
 
-export function NewCookiesMiddleware() {
+export function NewCookiesMiddleware(): tsHTTP.Middleware<Context> {
   return {
     use,
   };

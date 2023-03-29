@@ -2,10 +2,6 @@ import * as http from "node:http";
 import * as tsHTTP from "../tsHTTP.js";
 import type { Context as SendStringCtx } from "../middleware/sendStringMiddleware.js";
 import type { Context as CookiesCtx } from "../middleware/cookiesMiddleware.js";
-import {
-  sendStringMiddleware,
-  cookiesMiddleware,
-} from "../middleware/index.js";
 
 export type Deps = null;
 export type Ctx = SendStringCtx & CookiesCtx;
@@ -16,10 +12,12 @@ export function Handler(_deps: Deps): tsHTTP.Handler<Ctx> {
   };
 }
 
-export function Listener(): http.RequestListener {
-  const wrappedHandler = sendStringMiddleware.use(
-    cookiesMiddleware.use(Handler(null))
-  );
+export function Listener(
+  sendString: tsHTTP.Middleware<SendStringCtx>,
+  cookies: tsHTTP.Middleware<CookiesCtx>,
+  deps: Deps
+): http.RequestListener {
+  const wrappedHandler = sendString.use(cookies.use(Handler(deps)));
   return (req, res) => {
     const ctx: Ctx = {
       reply: "",

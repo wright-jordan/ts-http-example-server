@@ -16,7 +16,7 @@ function use(next: tsHTTP.Handler<Context & any>): tsHTTP.Handler<Context> {
   };
 }
 
-export function NewSendStringMiddleware() {
+export function NewSendStringMiddleware(): tsHTTP.Middleware<Context> {
   return {
     use,
   };
