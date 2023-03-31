@@ -1,5 +1,3 @@
-# create-node-package
+# ts-http-example-server
 
-If your package is going to be imported by other packages:
-
-- In _tsconfig.json_, un-comment the line that sets `compilerOptions.declaration: true`.
+Provides an example of how to use node core + ts-http to make an organized project.
