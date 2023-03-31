@@ -1,16 +1,13 @@
 import * as tsHTTP from "../tsHTTP.js";
 function use(next) {
     return async (req, res, ctx) => {
+        ctx.message = this.config.message;
         await next(req, res, ctx);
-        if (res.headersSent) {
-            return;
-        }
-        res.statusCode = ctx.status;
-        res.end(ctx.reply);
     };
 }
-export function NewSendStringMiddleware() {
+export function New(config) {
     return {
+        config,
         use,
     };
 }

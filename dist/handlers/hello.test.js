@@ -2,15 +2,31 @@ import test from "node:test";
 import * as tsHTTP from "../tsHTTP.js";
 import * as hello from "./hello.js";
 import assert from "node:assert/strict";
-import { NewSendStringMiddleware } from "../middleware/sendStringMiddleware.js";
-import { NewCookiesMiddleware } from "../middleware/cookiesMiddleware.js";
-test('should push "hello=world" to ctx.cookies', async () => {
-    const sendString = NewSendStringMiddleware();
-    const cookies = NewCookiesMiddleware();
-    const testServer = tsHTTP.NewTestServer(hello.Listener(sendString, cookies, null));
-    testServer.listen(8080);
-    // @ts-ignore
-    const res = await fetch("http://localhost:8080");
-    assert.ok(true);
-    await testServer.stop();
+import supertest from "supertest";
+test("should respond with `{ message: ctx.message }`", async () => {
+    const tests = [
+        {
+            ctx: { message: "hello world" },
+            expected: { message: "hello world" },
+            actual: null,
+            deps: null,
+        },
+        {
+            ctx: { message: "hola mundo" },
+            expected: { message: "hola mundo" },
+            actual: null,
+            deps: null,
+        },
+    ];
+    // EXERCISE
+    for (const test of tests) {
+        const res = await supertest(tsHTTP.NewTestListenerFromHandler(test.ctx, hello.Handler(test.deps))).get("/");
+        test.actual = res.body;
+    }
+    // VERIFY
+    for (const test of tests) {
+        assert.deepEqual(test.actual, test.expected);
+    }
+    // TEARDOWN
+    ("n/a");
 });

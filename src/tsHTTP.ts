@@ -1,53 +1,41 @@
 import * as http from "node:http";
-import * as net from "node:net";
 
-interface Context {}
+type JSON =
+  | boolean
+  | number
+  | string
+  | null
+  | { [key: string]: JSON }
+  | Array<JSON>;
 
-export interface Handler<Ctx extends Context> {
-  (
-    req: http.IncomingMessage,
-    res: http.ServerResponse,
-    ctx: Ctx
-  ): Promise<void>;
+interface Context {
+  [key: string]: JSON;
 }
 
-interface TestServer {
-  _sockets: net.Socket[];
-  _server: http.Server;
-  stop(this: TestServer): Promise<void>;
-  listen(this: TestServer, port: number): void;
-}
+export type Handler<C extends Context> = {
+  (req: http.IncomingMessage, res: http.ServerResponse, ctx: C): Promise<void>;
+};
 
-async function stop(this: TestServer): Promise<void> {
-  return new Promise<void>((resolve) => {
-    this._server.close(() => {
-      for (const socket of this._sockets) {
-        socket.destroy();
-      }
-      resolve();
-    });
-  });
-}
-
-function listen(this: TestServer, port: number): void {
-  this._server.listen(port);
-}
-
-export function NewTestServer(listener: http.RequestListener): TestServer {
-  const server = http.createServer(listener);
-  const sockets: net.Socket[] = [];
-  server.on("connection", (socket) => {
-    sockets.push(socket);
-  });
-  return {
-    _sockets: sockets,
-    _server: server,
-    stop,
-    listen,
+export function NewTestListenerFromHandler<C extends Context>(
+  ctx: C,
+  handler: Handler<C>
+): http.RequestListener {
+  return function (req, res) {
+    handler(req, res, ctx);
   };
 }
 
-export function NewListener(
+export function NewTestListenerFromMiddleware<C extends Context>(
+  ctx: C,
+  middleware: Middleware<C>,
+  handler: Handler<C>
+): http.RequestListener {
+  return async function (req, res) {
+    middleware.use(handler)(req, res, ctx);
+  };
+}
+
+export function App(
   routes: Map<string, http.RequestListener>,
   fallback: http.RequestListener
 ): http.RequestListener {
@@ -56,6 +44,6 @@ export function NewListener(
   };
 }
 
-export interface Middleware<Ctx extends Context> {
-  use: (this: Middleware<Ctx>, next: Handler<Ctx & any>) => Handler<Ctx>;
-}
+export type Middleware<C extends Context> = {
+  use(this: Middleware<C>, next: Handler<any>): Handler<C>;
+};

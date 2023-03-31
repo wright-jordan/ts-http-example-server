@@ -1,5 +1,3 @@
-import { NewCookiesMiddleware } from "./cookiesMiddleware.js";
-import { NewSendStringMiddleware } from "./sendStringMiddleware.js";
+import * as _sample from "./sample.js";
 
-export const cookies = NewCookiesMiddleware();
-export const sendString = NewSendStringMiddleware();
+export const sample = _sample.New({ message: "hello world" });
