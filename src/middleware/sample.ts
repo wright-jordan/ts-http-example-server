@@ -4,7 +4,7 @@ export type Context = {
   message: string;
 };
 
-type Config = {
+export type Config = {
   message: string;
 };
 
