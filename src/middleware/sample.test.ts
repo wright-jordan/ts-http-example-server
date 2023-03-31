@@ -2,7 +2,7 @@ import test from "node:test";
 import * as sample from "./sample.js";
 import * as tsHTTP from "../tsHTTP.js";
 import supertest from "supertest";
-import assert from "node:assert";
+import assert from "node:assert/strict";
 
 test("should set ctx.message to the value of config.message", async () => {
   // SETUP
