@@ -1,12 +1,6 @@
 import * as http from "node:http";
 
-type JSON =
-  | boolean
-  | number
-  | string
-  | null
-  | { [s: string]: JSON }
-  | Array<JSON>;
+type JSON = boolean | number | string | null | { [s: string]: JSON } | JSON[];
 
 interface Context {
   [s: string]: JSON;
