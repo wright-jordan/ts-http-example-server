@@ -2,9 +2,9 @@ import * as http from "node:http";
 
 type JSON = boolean | number | string | null | { [s: string]: JSON } | JSON[];
 
-interface Context {
+type Context = {
   [s: string]: JSON;
-}
+};
 
 export type Handler<C extends Context> = {
   (req: http.IncomingMessage, res: http.ServerResponse, ctx: C): Promise<void>;
