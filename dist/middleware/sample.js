@@ -1,4 +1,3 @@
-import * as tsHTTP from "../tsHTTP.js";
 function use(next) {
     return async (req, res, ctx) => {
         ctx.message = this.config.message;
