@@ -6,16 +6,16 @@ import * as sample from "../middleware/sample.js";
 export type Dependencies = null;
 export type Context = sample.Context;
 
-export function Handler(_deps: Dependencies): tsHTTP.Handler<Context> {
+export function NewHandler(_deps: Dependencies): tsHTTP.Handler<Context> {
   return async (_req, res, ctx) => {
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify({ message: ctx.message }));
   };
 }
 
-const handler = middleware.sample.use(Handler(null));
+const handler = middleware.sample.use(NewHandler(null));
 
-export function Listener(): http.RequestListener {
+export function New(): http.RequestListener {
   return (req, res) => {
     const ctx: Context = {
       message: "",

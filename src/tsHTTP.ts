@@ -5,11 +5,11 @@ type JSON =
   | number
   | string
   | null
-  | { [key: string]: JSON }
+  | { [s: string]: JSON }
   | Array<JSON>;
 
 interface Context {
-  [key: string]: JSON;
+  [s: string]: JSON;
 }
 
 export type Handler<C extends Context> = {
@@ -20,7 +20,7 @@ export function NewTestListenerFromHandler<C extends Context>(
   ctx: C,
   handler: Handler<C>
 ): http.RequestListener {
-  return function (req, res) {
+  return (req, res) => {
     handler(req, res, ctx);
   };
 }
@@ -30,12 +30,12 @@ export function NewTestListenerFromMiddleware<C extends Context>(
   middleware: Middleware<C>,
   handler: Handler<C>
 ): http.RequestListener {
-  return async function (req, res) {
+  return (req, res) => {
     middleware.use(handler)(req, res, ctx);
   };
 }
 
-export function App(
+export function NewAppListener(
   routes: Map<string, http.RequestListener>,
   fallback: http.RequestListener
 ): http.RequestListener {

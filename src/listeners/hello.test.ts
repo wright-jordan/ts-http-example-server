@@ -30,7 +30,7 @@ test("should respond with `{ message: ctx.message }`", async () => {
   // EXERCISE
   for (const test of tests) {
     const res = await supertest(
-      tsHTTP.NewTestListenerFromHandler(test.ctx, hello.Handler(test.deps))
+      tsHTTP.NewTestListenerFromHandler(test.ctx, hello.NewHandler(test.deps))
     ).get("/");
     test.actual = res.body;
   }

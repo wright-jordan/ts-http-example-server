@@ -4,13 +4,13 @@ export type Context = {
   message: string;
 };
 
+type Config = {
+  message: string;
+};
+
 export type Middleware = tsHTTP.Middleware<Context> & {
   config: Config;
 };
-
-interface Config {
-  message: string;
-}
 
 function use(
   this: Middleware,
