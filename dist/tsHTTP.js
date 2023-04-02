@@ -1,11 +1,11 @@
-export function NewTestListenerFromHandler(ctx, handler) {
+export function NewTestRouteListener(ctx, ctxListener) {
     return (req, res) => {
-        handler(req, res, ctx);
+        ctxListener(req, res, ctx);
     };
 }
-export function NewTestListenerFromMiddleware(ctx, middleware, handler) {
+export function NewTestMiddlewareListener(ctx, middleware, ctxListener) {
     return (req, res) => {
-        middleware.use(handler)(req, res, ctx);
+        middleware.use(ctxListener)(req, res, ctx);
     };
 }
 export function NewAppListener(routes, fallback) {

@@ -14,8 +14,8 @@ export type Middleware = tsHTTP.Middleware<Context> & {
 
 function use(
   this: Middleware,
-  next: tsHTTP.Handler<any>
-): tsHTTP.Handler<Context> {
+  next: tsHTTP.ListenerWithContext<any>
+): tsHTTP.ListenerWithContext<Context> {
   return async (req, res, ctx) => {
     ctx.message = this.config.message;
     await next(req, res, ctx);

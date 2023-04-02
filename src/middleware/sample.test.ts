@@ -26,17 +26,21 @@ test("should set ctx.message to the value of config.message", async () => {
       actual: "",
     },
   ];
-  const handler: tsHTTP.Handler<sample.Context> = async (_req, res, _ctx) => {
+  const ctxListener: tsHTTP.ListenerWithContext<sample.Context> = async (
+    _req,
+    res,
+    _ctx
+  ) => {
     res.end();
   };
 
   // EXERCISE
   for (const test of tests) {
     await supertest(
-      tsHTTP.NewTestListenerFromMiddleware(
+      tsHTTP.NewTestMiddlewareListener(
         test.ctx,
         sample.New(test.config),
-        handler
+        ctxListener
       )
     ).get("/");
     test.actual = test.ctx.message;

@@ -1,5 +1,5 @@
 import * as http from "node:http";
-import * as hello from "./listeners/hello.js";
+import * as hello from "./routes/hello.js";
 import * as tsHTTP from "./tsHTTP.js";
 
 const routes = new Map<string, http.RequestListener>();

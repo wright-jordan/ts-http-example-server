@@ -1,16 +1,16 @@
 import * as middleware from "../middleware/index.js";
-export function NewHandler(_deps) {
+export function NewWithContext(_deps) {
     return async (_req, res, ctx) => {
         res.setHeader("Content-Type", "application/json");
         res.end(JSON.stringify({ message: ctx.message }));
     };
 }
-const handler = middleware.sample.use(NewHandler(null));
+const ctxListener = middleware.sample.use(NewWithContext(null));
 export function New() {
     return (req, res) => {
         const ctx = {
             message: "",
         };
-        handler(req, res, ctx);
+        ctxListener(req, res, ctx);
     };
 }

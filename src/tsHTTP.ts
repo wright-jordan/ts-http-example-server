@@ -6,26 +6,26 @@ type Context = {
   [s: string]: JSON;
 };
 
-export type Handler<C extends Context> = {
+export type ListenerWithContext<C extends Context> = {
   (req: http.IncomingMessage, res: http.ServerResponse, ctx: C): Promise<void>;
 };
 
-export function NewTestListenerFromHandler<C extends Context>(
+export function NewTestRouteListener<C extends Context>(
   ctx: C,
-  handler: Handler<C>
+  ctxListener: ListenerWithContext<C>
 ): http.RequestListener {
   return (req, res) => {
-    handler(req, res, ctx);
+    ctxListener(req, res, ctx);
   };
 }
 
-export function NewTestListenerFromMiddleware<C extends Context>(
+export function NewTestMiddlewareListener<C extends Context>(
   ctx: C,
   middleware: Middleware<C>,
-  handler: Handler<C>
+  ctxListener: ListenerWithContext<C>
 ): http.RequestListener {
   return (req, res) => {
-    middleware.use(handler)(req, res, ctx);
+    middleware.use(ctxListener)(req, res, ctx);
   };
 }
 
@@ -39,5 +39,8 @@ export function NewAppListener(
 }
 
 export type Middleware<C extends Context> = {
-  use(this: Middleware<C>, next: Handler<any>): Handler<C>;
+  use(
+    this: Middleware<C>,
+    next: ListenerWithContext<any>
+  ): ListenerWithContext<C>;
 };
