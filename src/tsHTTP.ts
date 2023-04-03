@@ -1,10 +1,6 @@
 import * as http from "node:http";
 
-type JSON = boolean | number | string | null | { [s: string]: JSON } | JSON[];
-
-type Context = {
-  [s: string]: JSON;
-};
+type Context = {};
 
 export type ListenerWithContext<C extends Context> = {
   (req: http.IncomingMessage, res: http.ServerResponse, ctx: C): Promise<void>;
