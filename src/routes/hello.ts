@@ -1,5 +1,5 @@
 import * as http from "node:http";
-import * as tsHTTP from "../tsHTTP.js";
+import * as tsHTTP from "ts-http";
 import * as middleware from "../middleware/index.js";
 import * as sample from "../middleware/sample.js";
 

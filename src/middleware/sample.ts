@@ -1,4 +1,4 @@
-import * as tsHTTP from "../tsHTTP.js";
+import * as tsHTTP from "ts-http";
 
 export type Context = {
   message: string;

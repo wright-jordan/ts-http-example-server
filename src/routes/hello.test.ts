@@ -1,5 +1,5 @@
 import test from "node:test";
-import * as tsHTTP from "../tsHTTP.js";
+import * as tsHTTP from "ts-http";
 import * as hello from "./hello.js";
 import assert from "node:assert/strict";
 import supertest from "supertest";
